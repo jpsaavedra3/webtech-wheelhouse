@@ -18,8 +18,11 @@ The only thing the public sees is the price list.
 ## Who uses it
 
 **Receptionist** takes bikes in, answers "is my bike ready", records the customer's answer to a quote, hands bikes back 
+
 **Mechanic** writes the diagnosis, adds the jobs a bike needs, marks them done, reads what was done to this bike before
+
 **Owner** watches the repairs that are past their promised day, keeps the wall list of prices, grants discounts 
+
 **Visitor** reads the price list on the public site, and nothing else
 
 The **customer** is not a user of the system. The shop phones them and waits for a yes; the
