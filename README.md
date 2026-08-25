@@ -17,7 +17,6 @@ The only thing the public sees is the price list.
 
 ## Who uses it
 
-
 **Receptionist** takes bikes in, answers "is my bike ready", records the customer's answer to a quote, hands bikes back 
 **Mechanic** writes the diagnosis, adds the jobs a bike needs, marks them done, reads what was done to this bike before
 **Owner** watches the repairs that are past their promised day, keeps the wall list of prices, grants discounts 
@@ -28,9 +27,10 @@ counter records the answer.
 
 ## The documents
 
-
-
 [`docs/user-stories.md`](docs/user-stories.md)  The roles, fifteen user stories, one story that was too big and its split, and acceptance criteria for four of them 
+
 [`docs/domain-model.md`](docs/domain-model.md)  The relational model as a diagram and as DBML, the lifecycle of a repair, and every entity traced back to the story that requires it 
+
 [`docs/decisions.md`](docs/decisions.md)  The three questions the owner's description does not answer, the assumption taken for each, and what would change in the model if the answer were the other one 
-[`docs/wireframes.md`](docs/wireframes.md) | Four low-fidelity screens, each labelled with the role looking at it, and the navigation graph between them 
+
+[`docs/wireframes.md`](docs/wireframes.md) Four low-fidelity screens, each labelled with the role looking at it, and the navigation graph between them 
