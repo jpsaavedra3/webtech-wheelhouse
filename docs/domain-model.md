@@ -115,13 +115,13 @@ a question asked of a repair, not a state it is in, and it is answered below.
 | Entity | The story that requires it |
 |---|---|
 |  customers  | **US-01** — *"we write their name and phone on a paper tag"* |
-|  bikes  | **US-01**, and **US-09**, which forces the bike to exist apart from its owner |
+|  bikes  | **US-01**, and **US-10**, which forces the bike to exist apart from its owner |
 |  bike_models  | **US-01** — *"a Trek Marlin, a Giant Escape"* |
-|  users  | **US-06** — a mechanic cannot see *their* repairs unless the system tells mechanics apart |
+|  users  | **US-07** — a mechanic cannot see *their* repairs unless the system tells mechanics apart |
 |  repairs  | **US-01**, and every story from US-02 to US-13 |
 |  services  | **US-14**, the public wall list, and **US-07**, which puts lines on a repair |
-|  repair_services  | **US-07** and **US-12**; the discount has nowhere else to live |
-|  repair_photos  | **US-13** — *"so that nobody argues later about who made the scratch"* |
+|  repair_services  | **US-08** and **US-13**; the discount has nowhere else to live |
+|  repair_photos  | **US-2** — *"so that nobody argues later about who made the scratch"* |
 
 ## Two decisions defended
 
