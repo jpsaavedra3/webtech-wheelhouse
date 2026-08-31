@@ -1,0 +1,30 @@
+<h1 class="mb-3">What we charge</h1>
+
+<p class="lead mb-4">
+  We charge by the job, not by the hour. A bike usually needs two or three of these.
+</p>
+
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr>
+        <th scope="col">Job</th>
+        <th scope="col">What it covers</th>
+        <th scope="col" class="text-end">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @services.each do |service| %>
+        <tr>
+          <th scope="row"><%= service[:name] %></th>
+          <td><%= service[:description] %></td>
+          <td class="text-end">
+            <%= number_to_currency(service[:price], unit: "$", precision: 0, delimiter: ".") %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<p class="text-muted mt-3">Prices are reviewed every January.</p>
