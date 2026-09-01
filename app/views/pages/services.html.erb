@@ -7,22 +7,20 @@
 <div class="table-responsive">
   <table class="table table-striped align-middle">
     <thead>
-      <tr>
-        <th scope="col">Job</th>
-        <th scope="col">What it covers</th>
-        <th scope="col" class="text-end">Price</th>
-      </tr>
+    <tr>
+      <th scope="col">Job</th>
+      <th scope="col">What it covers</th>
+      <th scope="col" class="text-end">Price</th>
+    </tr>
     </thead>
     <tbody>
-      <% @services.each do |service| %>
-        <tr>
-          <th scope="row"><%= service[:name] %></th>
-          <td><%= service[:description] %></td>
-          <td class="text-end">
-            <%= number_to_currency(service[:price], unit: "$", precision: 0, delimiter: ".") %>
-          </td>
-        </tr>
-      <% end %>
+    <% @services.each do |service| %>
+      <tr>
+        <th scope="row"><%= service[:name] %></th>
+        <td><%= service[:description] %></td>
+        <td class="text-end">$<%= service[:price] %></td>
+      </tr>
+    <% end %>
     </tbody>
   </table>
 </div>
