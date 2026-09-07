@@ -15,11 +15,11 @@
     </thead>
     <tbody>
     <% @services.each do |service| %>
-      <tr>
-        <th scope="row"><%= service[:name] %></th>
-        <td><%= service[:description] %></td>
-        <td class="text-end">$<%= service[:price] %></td>
-      </tr>
+    <tr>
+      <th scope="row"><%= service.name %></th>
+      <td><%= service.description %></td>
+      <td class="text-end">$<%= service.price.to_i %></td>
+    </tr>
     <% end %>
     </tbody>
   </table>

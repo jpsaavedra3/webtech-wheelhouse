@@ -39,12 +39,11 @@ sudo -u postgres createuser --superuser $(whoami)
 
 ## Setup
 
-```bash
-git clone https://github.com/jpsaavedra3/webtech-wheelhouse.git
-cd webtech-wheelhouse
-bundle install
-yarn install
-bin/rails db:create
+    git clone https://github.com/jpsaavedra3/webtech-wheelhouse.git
+    cd webtech-wheelhouse
+    bundle install
+    yarn install
+    bin/rails db:prepare
 ```
 
 ## Running it
