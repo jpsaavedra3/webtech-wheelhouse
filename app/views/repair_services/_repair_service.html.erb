@@ -1,0 +1,6 @@
+<tr>
+  <td><%= link_to repair_service.service.name, repair_service.service %></td>
+  <td><%= repair_service.mechanic ? repair_service.mechanic.name : "not assigned" %></td>
+  <td><%= repair_service.completed_at ? l(repair_service.completed_at, format: :short) : "not done" %></td>
+  <td class="text-end"><%= money(repair_service.charged_price) %></td>
+</tr>

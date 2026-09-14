@@ -1,0 +1,6 @@
+<tr>
+  <td><%= link_to "#{bike.bike_model.brand} #{bike.bike_model.name}", bike %></td>
+  <td><%= bike.serial_number || "not legible" %></td>
+  <td><%= bike.colour %></td>
+  <td><%= link_to bike.customer.name, bike.customer %></td>
+</tr>

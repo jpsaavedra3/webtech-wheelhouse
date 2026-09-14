@@ -1,0 +1,7 @@
+<tr class="<%= "table-danger" if overdue?(repair) %>">
+  <td><%= link_to "##{repair.id}", repair %></td>
+  <td><%= link_to "#{repair.bike.bike_model.brand} #{repair.bike.bike_model.name}", repair.bike %></td>
+  <td><%= link_to repair.bike.customer.name, repair.bike.customer %></td>
+  <td><span class="badge text-bg-secondary"><%= repair.state.humanize %></span></td>
+  <td><%= l(repair.promised_on, format: :short) %></td>
+</tr>
