@@ -62,6 +62,7 @@ felipe    = Customer.create!(name: "Felipe Guzmán",     phone: "+56 9 6688 7124
 rocio     = Customer.create!(name: "Rocío Tapia",       phone: "+56 9 9271 6603")
 matias    = Customer.create!(name: "Matías Contreras",  phone: "+56 9 5134 9987")
 javiera   = Customer.create!(name: "Javiera Peña",      phone: "+56 9 8456 2210")
+renata    = Customer.create!(name: "Renata Salas",      phone: "+56 9 7789 4412")
 
 
 puts "Bikes..."
@@ -73,6 +74,7 @@ aspect      = BikeModel.create!(brand: "Scott",       name: "Aspect 950")
 quick       = BikeModel.create!(brand: "Cannondale",  name: "Quick 4")
 kansas      = BikeModel.create!(brand: "Oxford",      name: "Kansas")
 via_nirone  = BikeModel.create!(brand: "Bianchi",     name: "Via Nirone 7")
+
 
 
 marlin_marcela = Bike.create!(bike_model_id: marlin.id,     customer_id: marcela.id,   serial_number: "WTU123456A",  colour: "Blue")
@@ -94,6 +96,7 @@ aspect_matias  = Bike.create!(bike_model_id: aspect.id,     customer_id: matias.
 
 # This one arrived with the serial number filed off. The column allows NULL.
 kansas_javiera = Bike.create!(bike_model_id: kansas.id,     customer_id: javiera.id,   serial_number: nil,           colour: "Black")
+escape_renata = Bike.create!(bike_model_id: escape.id, customer_id: renata.id, serial_number: "GS5590127", colour: "Grey")
 
 
 puts "Repairs..."

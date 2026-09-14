@@ -1,0 +1,26 @@
+<% content_for :title, "Staff" %>
+
+<h1 class="mb-4">Staff</h1>
+
+<% if @users.empty? %>
+  <p class="text-muted">Nobody works here yet.</p>
+<% else %>
+  <div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+      <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Role</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= link_to user.name, user %></td>
+          <td><%= user.role.humanize %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

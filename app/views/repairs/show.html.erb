@@ -1,0 +1,77 @@
+<% content_for :title, "Repair ##{@repair.id}" %>
+
+<h1 class="mb-1">Repair #<%= @repair.id %></h1>
+<p class="text-muted mb-4">
+  <%= link_to "#{@repair.bike.bike_model.brand} #{@repair.bike.bike_model.name}", @repair.bike %> ·
+  <%= link_to @repair.bike.customer.name, @repair.bike.customer %>
+</p>
+
+<div class="row g-4 mb-4">
+  <div class="col-12 col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title h6">This repair</h2>
+        <p class="mb-1">
+          State:
+          <span class="badge text-bg-secondary"><%= @repair.state.humanize %></span>
+          <% if overdue?(@repair) %>
+            <span class="badge text-bg-danger">Overdue</span>
+          <% end %>
+        </p>
+        <p class="mb-1">Received: <%= l(@repair.received_at, format: :long) %></p>
+        <p class="mb-1">Promised: <%= l(@repair.promised_on, format: :long) %></p>
+        <p class="mb-1">
+          Collected:
+          <%= @repair.collected_at ? l(@repair.collected_at, format: :long) : "not yet" %>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title h6">The quote</h2>
+        <p class="mb-1">Taken in by <%= link_to @repair.received_by.name, @repair.received_by %></p>
+        <% if @repair.quote_answered_by %>
+          <p class="mb-1">
+            Answered <%= l(@repair.quote_answered_at, format: :long) %>,
+            recorded by <%= link_to @repair.quote_answered_by.name, @repair.quote_answered_by %>
+          </p>
+        <% else %>
+          <p class="mb-1 text-muted">No answer recorded yet.</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 class="h5 mb-3"><%= pluralize(@repair.repair_services.size, "service") %> charged</h2>
+
+<% if @repair.repair_services.empty? %>
+  <p class="text-muted">Nothing has been quoted on this repair yet.</p>
+<% else %>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+      <tr>
+        <th scope="col">Job</th>
+        <th scope="col">Mechanic</th>
+        <th scope="col">Finished</th>
+        <th scope="col" class="text-end">Charged</th>
+      </tr>
+      </thead>
+      <tbody>
+      <%= render @repair.repair_services %>
+      </tbody>
+      <tfoot>
+      <tr>
+        <th scope="row" colspan="3">Total</th>
+        <th class="text-end"><%= money(@repair.repair_services.sum(:charged_price)) %></th>
+      </tr>
+      </tfoot>
+    </table>
+  </div>
+<% end %>
+
+<%= link_to "All repairs", repairs_path, class: "btn btn-outline-secondary mt-3" %>

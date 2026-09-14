@@ -1,0 +1,36 @@
+<% content_for :title, @service.name %>
+
+<h1 class="mb-1"><%= @service.name %></h1>
+<p class="lead"><%= money(@service.price) %></p>
+<p class="mb-4"><%= @service.description %></p>
+
+<h2 class="h5 mb-3">Times we have done this</h2>
+
+<% if @service.repair_services.empty? %>
+  <p class="text-muted">This job has never been charged on a repair.</p>
+<% else %>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+      <tr>
+        <th scope="col">Repair</th>
+        <th scope="col">Bike</th>
+        <th scope="col">Finished</th>
+        <th scope="col" class="text-end">Charged</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @service.repair_services.each do |line| %>
+        <tr>
+          <td><%= link_to "##{line.repair.id}", line.repair %></td>
+          <td><%= link_to "#{line.repair.bike.bike_model.brand} #{line.repair.bike.bike_model.name}", line.repair.bike %></td>
+          <td><%= line.completed_at ? l(line.completed_at, format: :short) : "not done" %></td>
+          <td class="text-end"><%= money(line.charged_price) %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<%= link_to "The price list", services_path, class: "btn btn-outline-secondary mt-3" %>

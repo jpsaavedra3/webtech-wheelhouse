@@ -1,0 +1,35 @@
+<% content_for :title, @user.name %>
+
+<h1 class="mb-1"><%= @user.name %></h1>
+<p class="text-muted mb-4"><%= @user.role.humanize %></p>
+
+<h2 class="h5 mb-3">Jobs done</h2>
+
+<% if @user.repair_services.empty? %>
+  <p class="text-muted">No jobs have been assigned to this person.</p>
+<% else %>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+      <tr>
+        <th scope="col">Job</th>
+        <th scope="col">Repair</th>
+        <th scope="col">Finished</th>
+        <th scope="col" class="text-end">Charged</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @user.repair_services.each do |line| %>
+        <tr>
+          <td><%= link_to line.service.name, line.service %></td>
+          <td><%= link_to "##{line.repair.id}", line.repair %></td>
+          <td><%= line.completed_at ? l(line.completed_at, format: :short) : "not done" %></td>
+          <td class="text-end"><%= money(line.charged_price) %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<%= link_to "All staff", users_path, class: "btn btn-outline-secondary mt-3" %>
