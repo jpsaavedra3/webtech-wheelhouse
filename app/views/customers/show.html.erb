@@ -3,9 +3,9 @@
 <h1 class="mb-1"><%= @customer.name %></h1>
 <p class="text-muted mb-4"><%= @customer.phone %></p>
 
-<h2 class="h5 mb-3"><%= pluralize(@customer.bikes.size, "bike") %></h2>
+<h2 class="h5 mb-3"><%= pluralize(@bikes.size, "bike") %></h2>
 
-<% if @customer.bikes.empty? %>
+<% if @bikes.empty? %>
   <p class="text-muted">This customer has no bikes registered.</p>
 <% else %>
   <div class="table-responsive">
@@ -19,7 +19,7 @@
       </tr>
       </thead>
       <tbody>
-      <%= render @customer.bikes %>
+      <%= render @bikes %>
       </tbody>
     </table>
   </div>

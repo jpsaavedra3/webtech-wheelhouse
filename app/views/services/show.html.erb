@@ -6,7 +6,7 @@
 
 <h2 class="h5 mb-3">Times we have done this</h2>
 
-<% if @service.repair_services.empty? %>
+<% if @lines.empty? %>
   <p class="text-muted">This job has never been charged on a repair.</p>
 <% else %>
   <div class="table-responsive">
@@ -20,7 +20,7 @@
       </tr>
       </thead>
       <tbody>
-      <% @service.repair_services.each do |line| %>
+      <% @lines.each do |line| %>
         <tr>
           <td><%= link_to "##{line.repair.id}", line.repair %></td>
           <td><%= link_to "#{line.repair.bike.bike_model.brand} #{line.repair.bike.bike_model.name}", line.repair.bike %></td>

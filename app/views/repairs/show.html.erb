@@ -14,7 +14,7 @@
         <p class="mb-1">
           State:
           <span class="badge text-bg-secondary"><%= @repair.state.humanize %></span>
-          <% if overdue?(@repair) %>
+          <% if @repair.overdue? %>
             <span class="badge text-bg-danger">Overdue</span>
           <% end %>
         </p>
@@ -33,10 +33,10 @@
       <div class="card-body">
         <h2 class="card-title h6">The quote</h2>
         <p class="mb-1">Taken in by <%= link_to @repair.received_by.name, @repair.received_by %></p>
-        <% if @repair.quote_answered_by %>
+        <% if @repair.quote_answered_at %>
           <p class="mb-1">
-            Answered <%= l(@repair.quote_answered_at, format: :long) %>,
-            recorded by <%= link_to @repair.quote_answered_by.name, @repair.quote_answered_by %>
+            Answered <%= l(@repair.quote_answered_at, format: :long) %><% if @repair.quote_answered_by %>,
+              recorded by <%= link_to @repair.quote_answered_by.name, @repair.quote_answered_by %><% end %>
           </p>
         <% else %>
           <p class="mb-1 text-muted">No answer recorded yet.</p>
@@ -46,9 +46,9 @@
   </div>
 </div>
 
-<h2 class="h5 mb-3"><%= pluralize(@repair.repair_services.size, "service") %> charged</h2>
+<h2 class="h5 mb-3"><%= pluralize(@lines.size, "service") %> charged</h2>
 
-<% if @repair.repair_services.empty? %>
+<% if @lines.empty? %>
   <p class="text-muted">Nothing has been quoted on this repair yet.</p>
 <% else %>
   <div class="table-responsive">
@@ -62,12 +62,12 @@
       </tr>
       </thead>
       <tbody>
-      <%= render @repair.repair_services %>
+      <%= render @lines %>
       </tbody>
       <tfoot>
       <tr>
         <th scope="row" colspan="3">Total</th>
-        <th class="text-end"><%= money(@repair.repair_services.sum(:charged_price)) %></th>
+        <th class="text-end"><%= money(@repair.total) %></th>
       </tr>
       </tfoot>
     </table>

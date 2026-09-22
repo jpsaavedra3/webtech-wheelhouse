@@ -5,7 +5,7 @@
 
 <h2 class="h5 mb-3">Jobs done</h2>
 
-<% if @user.repair_services.empty? %>
+<% if @lines.empty? %>
   <p class="text-muted">No jobs have been assigned to this person.</p>
 <% else %>
   <div class="table-responsive">
@@ -19,7 +19,7 @@
       </tr>
       </thead>
       <tbody>
-      <% @user.repair_services.each do |line| %>
+      <% @lines.each do |line| %>
         <tr>
           <td><%= link_to line.service.name, line.service %></td>
           <td><%= link_to "##{line.repair.id}", line.repair %></td>

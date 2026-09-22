@@ -1,4 +1,4 @@
-<tr class="<%= "table-danger" if overdue?(repair) %>">
+<tr class="<%= "table-danger" if repair.overdue? %>">
   <td><%= link_to "##{repair.id}", repair %></td>
   <td><%= link_to "#{repair.bike.bike_model.brand} #{repair.bike.bike_model.name}", repair.bike %></td>
   <td><%= link_to repair.bike.customer.name, repair.bike.customer %></td>

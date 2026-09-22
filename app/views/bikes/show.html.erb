@@ -7,9 +7,9 @@
   Owned by <%= link_to @bike.customer.name, @bike.customer %>
 </p>
 
-<h2 class="h5 mb-3"><%= pluralize(@bike.repairs.size, "repair") %></h2>
+<h2 class="h5 mb-3"><%= pluralize(@repairs.size, "repair") %></h2>
 
-<% if @bike.repairs.empty? %>
+<% if @repairs.empty? %>
   <p class="text-muted">This bike has never been in for a repair.</p>
 <% else %>
   <div class="table-responsive">
@@ -24,7 +24,7 @@
       </tr>
       </thead>
       <tbody>
-      <%= render @bike.repairs %>
+      <%= render @repairs %>
       </tbody>
     </table>
   </div>
