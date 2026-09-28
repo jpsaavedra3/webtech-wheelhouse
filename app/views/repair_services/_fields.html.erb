@@ -1,0 +1,34 @@
+<div class="border rounded p-3 mb-3">
+  <div class="row g-3 align-items-end">
+    <div class="col-12 col-lg-4">
+      <%= line.label :service_id, "Job", class: "form-label" %>
+      <%= line.collection_select :service_id, @services, :id, :name,
+                                 { include_blank: "— none —" },
+                                 { class: field_class(line.object, :service, "form-select") } %>
+      <%= field_errors line.object, :service %>
+    </div>
+
+    <div class="col-12 col-lg-3">
+      <%= line.label :charged_price, "Charged", class: "form-label" %>
+      <%= line.number_field :charged_price, step: 1, min: 1,
+                            class: field_class(line.object, :charged_price) %>
+      <%= field_errors line.object, :charged_price %>
+    </div>
+
+    <div class="col-12 col-lg-3">
+      <%= line.label :mechanic_id, "Mechanic", class: "form-label" %>
+      <%= line.collection_select :mechanic_id, @staff, :id, :name,
+                                 { include_blank: "Not assigned" },
+                                 { class: field_class(line.object, :mechanic, "form-select") } %>
+    </div>
+
+    <div class="col-12 col-lg-2">
+      <% if line.object.persisted? %>
+        <div class="form-check">
+          <%= line.check_box :_destroy, class: "form-check-input" %>
+          <%= line.label :_destroy, "Remove", class: "form-check-label" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

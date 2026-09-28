@@ -2,7 +2,7 @@
 
 <h1 class="mb-2">Repairs</h1>
 <p class="text-muted mb-4">The soonest promise first. A red row is past the day we promised.</p>
-
+<%= link_to "New repair", new_repair_path, class: "btn btn-primary mb-3" %>
 <% if @repairs.empty? %>
   <p class="text-muted">There is nothing in the workshop.</p>
 <% else %>

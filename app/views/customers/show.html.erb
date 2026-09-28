@@ -4,6 +4,7 @@
 <p class="text-muted mb-4"><%= @customer.phone %></p>
 
 <h2 class="h5 mb-3"><%= pluralize(@bikes.size, "bike") %></h2>
+<%= link_to "Add a bike", new_bike_path(customer_id: @customer.id), class: "btn btn-sm btn-outline-primary mb-3" %>
 
 <% if @bikes.empty? %>
   <p class="text-muted">This customer has no bikes registered.</p>
@@ -24,5 +25,10 @@
     </table>
   </div>
 <% end %>
-
-<%= link_to "All customers", customers_path, class: "btn btn-outline-secondary mt-3" %>
+<div class="d-flex flex-wrap gap-2 mt-4">
+  <%= link_to "Edit", edit_customer_path(@customer), class: "btn btn-outline-primary" %>
+  <%= button_to "Delete", @customer, method: :delete,
+                class: "btn btn-outline-danger",
+                form: { data: { turbo_confirm: "Delete #{@customer.name}? This cannot be undone." } } %>
+  <%= link_to "All customers", customers_path, class: "btn btn-outline-secondary" %>
+</div>

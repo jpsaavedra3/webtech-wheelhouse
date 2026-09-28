@@ -1,7 +1,7 @@
 <% content_for :title, "Staff" %>
 
 <h1 class="mb-4">Staff</h1>
-
+<%= link_to "New user", new_user_path, class: "btn btn-primary mb-3" %>
 <% if @users.empty? %>
   <p class="text-muted">Nobody works here yet.</p>
 <% else %>

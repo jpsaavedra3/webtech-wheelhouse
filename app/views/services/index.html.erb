@@ -1,7 +1,7 @@
 <% content_for :title, "Services" %>
 
 <h1 class="mb-4">What we charge</h1>
-
+<%= link_to "New service", new_service_path, class: "btn btn-primary mb-3" %>
 <% if @services.empty? %>
   <p class="text-muted">There are no services on the list yet.</p>
 <% else %>

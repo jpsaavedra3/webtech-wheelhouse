@@ -1,0 +1,7 @@
+<% content_for :title, "Editing #{bike_label(@bike)}" %>
+
+<h1 class="mb-4">Edit <%= bike_label(@bike) %></h1>
+
+<%= render "form", bike: @bike %>
+
+<%= link_to "Back to this bike", @bike, class: "btn btn-link mt-3 ps-0" %>

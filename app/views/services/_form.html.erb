@@ -1,0 +1,23 @@
+<%= form_with model: service do |f| %>
+  <%= render "shared/error_summary", object: service %>
+
+  <div class="mb-3">
+    <%= f.label :name, class: "form-label" %>
+    <%= f.text_field :name, class: field_class(service, :name) %>
+    <%= field_errors service, :name %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :description, "What it covers", class: "form-label" %>
+    <%= f.text_area :description, rows: 2, class: field_class(service, :description) %>
+    <%= field_errors service, :description %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :price, class: "form-label" %>
+    <%= f.number_field :price, step: 1, min: 1, class: field_class(service, :price) %>
+    <%= field_errors service, :price %>
+  </div>
+
+  <%= f.submit class: "btn btn-primary" %>
+<% end %>

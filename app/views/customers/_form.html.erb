@@ -1,0 +1,17 @@
+<%= form_with model: customer do |f| %>
+  <%= render "shared/error_summary", object: customer %>
+
+  <div class="mb-3">
+    <%= f.label :name, class: "form-label" %>
+    <%= f.text_field :name, class: field_class(customer, :name) %>
+    <%= field_errors customer, :name %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :phone, class: "form-label" %>
+    <%= f.telephone_field :phone, class: field_class(customer, :phone) %>
+    <%= field_errors customer, :phone %>
+  </div>
+
+  <%= f.submit class: "btn btn-primary" %>
+<% end %>

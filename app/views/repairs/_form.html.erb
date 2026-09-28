@@ -1,0 +1,73 @@
+<%= form_with model: repair do |f| %>
+  <%= render "shared/error_summary", object: repair %>
+
+  <div class="row g-3">
+    <div class="col-12 col-lg-6">
+      <%= f.label :bike_id, "Bike", class: "form-label" %>
+      <%= f.select :bike_id, @bikes.map { |bike| [ bike_label(bike), bike.id ] },
+                   { include_blank: "Choose a bike" },
+                   { class: field_class(repair, :bike, "form-select") } %>
+      <%= field_errors repair, :bike %>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <%= f.label :received_by_id, "Taken in by", class: "form-label" %>
+      <%= f.collection_select :received_by_id, @staff, :id, :name,
+                              { include_blank: "Choose a person" },
+                              { class: field_class(repair, :received_by, "form-select") } %>
+      <%= field_errors repair, :received_by %>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <%= f.label :state, class: "form-label" %>
+      <%= f.select :state, Repair.states.keys.map { |state| [ state.humanize, state ] },
+                   {}, { class: field_class(repair, :state, "form-select") } %>
+      <%= field_errors repair, :state %>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <%= f.label :received_at, class: "form-label" %>
+      <%= f.datetime_field :received_at, class: field_class(repair, :received_at) %>
+      <%= field_errors repair, :received_at %>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <%= f.label :promised_on, class: "form-label" %>
+      <%= f.date_field :promised_on, class: field_class(repair, :promised_on) %>
+      <%= field_errors repair, :promised_on %>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <%= f.label :quote_answered_by_id, "Answer recorded by", class: "form-label" %>
+      <%= f.collection_select :quote_answered_by_id, @staff, :id, :name,
+                              { include_blank: "Nobody yet" },
+                              { class: field_class(repair, :quote_answered_by, "form-select") } %>
+      <%= field_errors repair, :quote_answered_by %>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <%= f.label :quote_answered_at, class: "form-label" %>
+      <%= f.datetime_field :quote_answered_at, class: field_class(repair, :quote_answered_at) %>
+      <%= field_errors repair, :quote_answered_at %>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <%= f.label :collected_at, class: "form-label" %>
+      <%= f.datetime_field :collected_at, class: field_class(repair, :collected_at) %>
+      <%= field_errors repair, :collected_at %>
+    </div>
+  </div>
+
+  <h2 class="h5 mt-4 mb-3">Jobs on this repair</h2>
+
+  <%= f.fields_for :repair_services do |line| %>
+    <%= render "repair_services/fields", line: line %>
+  <% end %>
+
+  <div class="form-text mb-3">
+    A job with no service chosen is ignored. To add more than the lines on offer, save and open the
+    repair again.
+  </div>
+
+  <%= f.submit class: "btn btn-primary" %>
+<% end %>

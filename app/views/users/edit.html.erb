@@ -1,0 +1,7 @@
+<% content_for :title, "Editing #{@user.name}" %>
+
+<h1 class="mb-4">Edit <%= @user.name %></h1>
+
+<%= render "form", user: @user %>
+
+<%= link_to "Back to #{@user.name}", @user, class: "btn btn-link mt-3 ps-0" %>
