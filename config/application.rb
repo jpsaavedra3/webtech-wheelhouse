@@ -23,5 +23,7 @@ module WebtechWheelhouse
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    # Do not wrap fields with errors in a div: Bootstrap marks them with a class instead.
+    config.action_view.field_error_proc = ->(html_tag, _instance) { html_tag }
   end
 end

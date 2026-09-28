@@ -5,6 +5,7 @@ class Repair < ApplicationRecord
 
   has_many :repair_services, dependent: :destroy
   has_many :services, through: :repair_services, dependent: :destroy
+  accepts_nested_attributes_for :repair_services, allow_destroy: true, reject_if: ->(attributes) { attributes[:service_id].blank? }
 
   enum :state, {
     received:    "received",
