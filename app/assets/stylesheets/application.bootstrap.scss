@@ -4,3 +4,10 @@ $border-radius:  0;
 
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
+@import "trix/dist/trix";
+
+.photo-thumb {
+  width: 120px;
+  height: 90px;
+  object-fit: cover;
+}

@@ -74,6 +74,35 @@
   </div>
 <% end %>
 
+<h2 class="h5 mt-4">Diagnosis</h2>
+
+<% if @repair.diagnosis.body.present? %>
+  <%= @repair.diagnosis %>
+<% else %>
+  <p class="text-body-secondary">No diagnosis written yet.</p>
+<% end %>
+
+<h2 class="h5 mt-4">Intake photos</h2>
+
+<% if @repair.intake_photos.attached? %>
+  <div class="row g-3">
+    <% @repair.intake_photos.each do |photo| %>
+      <div class="col-6 col-md-4">
+        <%= link_to url_for(photo), target: "_blank", rel: "noopener" do %>
+          <%= image_tag photo.variant(:medium),
+                alt: photo_alt(@repair),
+                class: "img-fluid rounded" %>
+        <% end %>
+        <%= button_to "Remove", photo_repair_path(@repair, photo.id), method: :delete,
+              class: "btn btn-sm btn-outline-danger mt-2",
+              form: { data: { turbo_confirm: "Remove this photo? This cannot be undone." } } %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p class="text-body-secondary">No intake photos for this repair.</p>
+<% end %>
+
 <div class="d-flex flex-wrap gap-2 mt-4">
   <%= link_to "Edit", edit_repair_path(@repair), class: "btn btn-outline-primary" %>
   <%= button_to "Delete", @repair, method: :delete,

@@ -9,6 +9,8 @@ en:
         promised_on: "Promised day"
         collected_at: "Hand-back time"
         quote_answered_at: "Customer's answer"
+        intake_photos: "Photo"
+        diagnosis: "Diagnosis"
       repair_service:
         charged_price: "Price charged"
       service:

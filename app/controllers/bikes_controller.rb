@@ -7,7 +7,11 @@ class BikesController < ApplicationController
   end
 
   def show
-    @repairs = @bike.repairs.includes(bike: [ :bike_model, :customer ]).newest_first
+    @repairs = @bike.repairs
+                    .with_attached_intake_photos
+                    .with_rich_text_diagnosis
+                    .includes(bike: [ :bike_model, :customer ])
+                    .newest_first
   end
 
   def new

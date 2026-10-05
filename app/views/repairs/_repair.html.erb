@@ -4,4 +4,17 @@
   <td><%= link_to repair.bike.customer.name, repair.bike.customer %></td>
   <td><span class="badge text-bg-secondary"><%= repair.state.humanize %></span></td>
   <td><%= l(repair.promised_on, format: :short) %></td>
+  <td>
+    <% if repair.intake_photos.attached? %>
+      <%= image_tag repair.intake_photos.first.variant(:thumb),
+            alt: photo_alt(repair),
+            class: "photo-thumb rounded" %>
+    <% else %>
+      <span class="photo-thumb rounded bg-body-secondary d-inline-block"></span>
+    <% end %>
+  </td>
+  
+  <td class="text-body-secondary">
+    <%= truncate(repair.diagnosis.to_plain_text, length: 70) %>
+  </td>
 </tr>
