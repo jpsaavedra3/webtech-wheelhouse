@@ -35,6 +35,7 @@ I worked on WSL (Ubuntu). If PostgreSQL does not know your user yet:
 
 ```bash
 sudo -u postgres createuser --superuser $(whoami)
+sudo apt install libvips
 ```
 
 ## Setup
@@ -49,6 +50,10 @@ sudo -u postgres createuser --superuser $(whoami)
 ## Running it
 
 ```bash
+bundle install
+yarn install
+yarn build:css
+bin/rails db:create db:migrate db:seed
 bin/dev
 ```
 

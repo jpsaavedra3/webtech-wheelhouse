@@ -269,3 +269,42 @@ puts "  #{Customer.count} customers"
 puts "  #{Bike.count} bikes"
 puts "  #{Repair.count} repairs"
 puts "  #{RepairService.count} lines on those repairs"
+
+
+photo_files = Rails.root.glob("db/seeds/*.jpg").sort
+
+Repair.order(:id).each_with_index do |repair, index|
+  next if index < 2                     # two repairs are left with no photos at all
+  next if repair.intake_photos.attached?
+
+  how_many = index == 2 ? 4 : 1 + (index % 2)
+
+  how_many.times do |n|
+    file = photo_files[(index + n) % photo_files.size]
+    repair.intake_photos.attach(io: file.open,
+                                filename: file.basename.to_s,
+                                content_type: "image/jpeg")
+  end
+end
+
+diagnosis = <<~HTML
+  <div>
+    <strong>Checked on the stand.</strong>
+    <ul>
+      <li>Rear wheel out of true, about 3 mm.</li>
+      <li>Brake pads worn past the line.</li>
+      <li>Chain still within tolerance.</li>
+    </ul>
+    <div>The owner was called and agreed to the quote.</div>
+  </div>
+HTML
+
+Repair.order(:id).each do |repair|
+  next if repair.received?
+  next if repair.rich_text_diagnosis.present?
+
+  repair.update!(diagnosis: diagnosis)
+end
+
+puts "Repairs with photos:    #{Repair.joins(:intake_photos_attachments).distinct.count}"
+puts "Repairs with diagnosis: #{Repair.joins(:rich_text_diagnosis).count}"

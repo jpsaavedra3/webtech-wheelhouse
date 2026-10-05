@@ -71,6 +71,12 @@ class RepairsController < ApplicationController
       @repair = Repair.with_attached_intake_photos.with_rich_text_diagnosis.find(params[:id])
     end
 
+    def load_form_collections
+      @bikes    = Bike.includes(:bike_model).by_serial
+      @staff    = User.by_name
+      @services = Service.by_name
+    end
+
     def add_intake_photos(repair)
       chosen = Array(repair_params[:intake_photos]).reject(&:blank?)
       return if chosen.empty?
