@@ -1,23 +1,27 @@
 Rails.application.routes.draw do
- get "up" => "rails/health#show", as: :rails_health_check
+  resource :session
+  resources :passwords, param: :token
+  resource :registration, only: %i[ new create ]
 
- root "pages#home"
+  get "up" => "rails/health#show", as: :rails_health_check
 
- get "visiting", to: "pages#visiting", as: :visiting
- get "about",    to: "pages#about",    as: :about
+  root "pages#home"
 
- resources :customers
- resources :bikes
- resources :repairs do
-  delete "photos/:photo_id", to: "repairs#remove_photo", as: :photo, on: :member
- end
- resources :services
- resources :users
+  get "visiting", to: "pages#visiting", as: :visiting
+  get "about",    to: "pages#about",    as: :about
 
- namespace :api, defaults: { format: :json } do
-  namespace :v1 do
-   resources :services, only: %i[ index show create ]
-   resources :repairs,  only: %i[ index show ]
+  resources :customers
+  resources :bikes
+  resources :repairs do
+    delete "photos/:photo_id", to: "repairs#remove_photo", as: :photo, on: :member
   end
- end
+  resources :services
+  resources :staff_members, path: "staff"
+
+  namespace :api, defaults: { format: :json } do
+    namespace :v1 do
+      resources :services, only: %i[ index show create ]
+      resources :repairs,  only: %i[ index show ]
+    end
+  end
 end

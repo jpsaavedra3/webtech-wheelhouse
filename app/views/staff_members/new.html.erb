@@ -1,0 +1,7 @@
+<% content_for :title, "New member" %>
+
+<h1 class="mb-4">New member</h1>
+
+<%= render "form", staff_member: @staff_member %>
+
+<%= link_to "Back to the staff", staff_members_path, class: "btn btn-link mt-3 ps-0" %>

@@ -32,7 +32,7 @@
     <div class="card">
       <div class="card-body">
         <h2 class="card-title h6">The quote</h2>
-        <p class="mb-1">Taken in by <%= link_to @repair.received_by.name, @repair.received_by %></p>
+        <p class="mb-1">Taken in by <%= @repair.received_by ? account_label(@repair.received_by) : "nobody recorded" %></p>
         <% if @repair.quote_answered_at %>
           <p class="mb-1">
             Answered <%= l(@repair.quote_answered_at, format: :long) %><% if @repair.quote_answered_by %>,

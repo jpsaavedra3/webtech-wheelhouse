@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_05_210645) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_27_141434) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -99,7 +99,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_05_210645) do
     t.datetime "quote_answered_at"
     t.bigint "quote_answered_by_id"
     t.datetime "received_at", null: false
-    t.bigint "received_by_id", null: false
+    t.bigint "received_by_id"
     t.string "state", default: "received", null: false
     t.datetime "updated_at", null: false
     t.index ["bike_id"], name: "index_repairs_on_bike_id"
@@ -116,11 +116,31 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_05_210645) do
     t.index ["name"], name: "index_services_on_name", unique: true
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "sessions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "ip_address"
+    t.datetime "updated_at", null: false
+    t.string "user_agent"
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "staff_members", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
     t.string "role", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email_address", null: false
+    t.string "password_digest", null: false
+    t.string "role", default: "mechanic", null: false
+    t.bigint "staff_member_id"
+    t.datetime "updated_at", null: false
+    t.index ["email_address"], name: "index_users_on_email_address", unique: true
+    t.index ["staff_member_id"], name: "index_users_on_staff_member_id", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -129,8 +149,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_05_210645) do
   add_foreign_key "bikes", "customers"
   add_foreign_key "repair_services", "repairs"
   add_foreign_key "repair_services", "services"
-  add_foreign_key "repair_services", "users", column: "mechanic_id"
+  add_foreign_key "repair_services", "staff_members", column: "mechanic_id"
   add_foreign_key "repairs", "bikes"
-  add_foreign_key "repairs", "users", column: "quote_answered_by_id"
+  add_foreign_key "repairs", "staff_members", column: "quote_answered_by_id"
   add_foreign_key "repairs", "users", column: "received_by_id"
+  add_foreign_key "sessions", "users"
+  add_foreign_key "users", "staff_members"
 end

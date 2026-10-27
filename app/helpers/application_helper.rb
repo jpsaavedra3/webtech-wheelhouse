@@ -21,4 +21,9 @@ module ApplicationHelper
   def photo_alt(repair)
     "#{bike_label(repair.bike)}, repair ##{repair.id}"
   end
+
+  # An account is shown by the name of its member of the staff, or by its email address.
+  def account_label(user)
+    user.staff_member&.name || user.email_address
+  end
 end

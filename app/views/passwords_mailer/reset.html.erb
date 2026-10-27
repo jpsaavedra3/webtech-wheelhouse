@@ -1,0 +1,12 @@
+<h1>Wheelhouse</h1>
+
+<p>Someone asked to reset the password of your Wheelhouse account, <%= @user.email_address %>.</p>
+
+<p>
+  You can choose a new password on
+  <%= link_to "this password reset page", edit_password_url(@user.password_reset_token) %>.
+
+  This link will expire in <%= distance_of_time_in_words(0, @user.password_reset_token_expires_in) %>.
+</p>
+
+<p>If it was not you, ignore this email. Your password stays the same.</p>

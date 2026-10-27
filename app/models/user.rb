@@ -1,9 +1,14 @@
 class User < ApplicationRecord
-  has_many :received_repairs, class_name: "Repair", foreign_key: "received_by_id", dependent: :restrict_with_error
-  has_many :answered_quotes,  class_name: "Repair", foreign_key: "quote_answered_by_id", dependent: :nullify
-  has_many :repair_services,  foreign_key: "mechanic_id", dependent: :nullify
+  has_secure_password
+  has_many :sessions, dependent: :destroy
 
-  validates :name, :role, presence: true
+  belongs_to :staff_member, optional: true
 
-  scope :by_name, -> { order(:name) }
+  enum :role, { owner: "owner", mechanic: "mechanic", counter: "counter" }
+
+  normalizes :email_address, with: ->(e) { e.strip.downcase }
+
+  validates :email_address, presence: true, uniqueness: { case_sensitive: false },
+                            format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :password, length: { minimum: 10 }, allow_nil: true
 end

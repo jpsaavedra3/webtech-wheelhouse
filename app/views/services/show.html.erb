@@ -4,6 +4,7 @@
 <p class="lead"><%= money(@service.price) %></p>
 <p class="mb-4"><%= @service.description %></p>
 
+<% if authenticated? %>
 <h2 class="h5 mb-3">Times we have done this</h2>
 
 <% if @lines.empty? %>
@@ -32,11 +33,14 @@
     </table>
   </div>
 <% end %>
+<% end %>
 
 <div class="d-flex flex-wrap gap-2 mt-4">
+  <% if authenticated? %>
   <%= link_to "Edit", edit_service_path(@service), class: "btn btn-outline-primary" %>
   <%= button_to "Delete", @service, method: :delete,
                 class: "btn btn-outline-danger",
                 form: { data: { turbo_confirm: "Delete #{@service.name}? This cannot be undone." } } %>
+  <% end %>
   <%= link_to "All services", services_path, class: "btn btn-outline-secondary" %>
 </div>

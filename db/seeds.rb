@@ -1,6 +1,12 @@
 
 puts "Clearing the database..."
 
+# The photos go first, and right away. Destroying a repair leaves its photos to a
+# background job that may not run before the seed ends.
+ActiveStorage::Attachment.delete_all
+ActiveStorage::VariantRecord.delete_all
+ActiveStorage::Blob.find_each(&:purge)
+
 RepairService.destroy_all
 Repair.destroy_all
 Bike.destroy_all
@@ -8,15 +14,31 @@ BikeModel.destroy_all
 Customer.destroy_all
 Service.destroy_all
 User.destroy_all
+StaffMember.destroy_all
 
 
 puts "Staff..."
 
-rodrigo = User.create!(name: "Rodrigo Alarcón",  role: "owner")
-andres  = User.create!(name: "Andrés Lillo",     role: "mechanic")
-nicolas = User.create!(name: "Nicolás Bustos",   role: "mechanic")
-paulina = User.create!(name: "Paulina Herrera",  role: "mechanic")
-josefa  = User.create!(name: "Josefa Alarcón",   role: "counter")
+rodrigo = StaffMember.create!(name: "Rodrigo Alarcón",  role: "owner")
+andres  = StaffMember.create!(name: "Andrés Lillo",     role: "mechanic")
+nicolas = StaffMember.create!(name: "Nicolás Bustos",   role: "mechanic")
+paulina = StaffMember.create!(name: "Paulina Herrera",  role: "mechanic")
+josefa  = StaffMember.create!(name: "Josefa Alarcón",   role: "counter")
+
+
+puts "Accounts..."
+
+# One account for each member of the staff. These passwords exist only in development.
+User.create!(email_address: "rodrigo@wheelhouse.cl", password: "rodrigo-wheelhouse", role: "owner",    staff_member: rodrigo)
+User.create!(email_address: "andres@wheelhouse.cl",  password: "andres-wheelhouse",  role: "mechanic", staff_member: andres)
+User.create!(email_address: "nicolas@wheelhouse.cl", password: "nicolas-wheelhouse", role: "mechanic", staff_member: nicolas)
+User.create!(email_address: "paulina@wheelhouse.cl", password: "paulina-wheelhouse", role: "mechanic", staff_member: paulina)
+josefa_account = User.create!(email_address: "josefa@wheelhouse.cl", password: "josefa-wheelhouse",
+                              role: "counter", staff_member: josefa)
+
+# The apprentice started this week: an account, but not on the staff list yet.
+# No role is given, so the account gets the default one.
+User.create!(email_address: "apprentice@wheelhouse.cl", password: "apprentice-wheelhouse")
 
 
 puts "Services..."
@@ -104,7 +126,7 @@ puts "Repairs..."
 today = Date.current
 
 # In and out the same afternoon. A flat tyre is never quoted.
-r1 = Repair.create!(bike_id: escape_camila.id, received_by_id: josefa.id,
+r1 = Repair.create!(bike_id: escape_camila.id, received_by: josefa_account,
                     state: "collected",
                     received_at: today - 30, promised_on: today - 30,
                     collected_at: today - 30)
@@ -113,7 +135,7 @@ RepairService.create!(repair_id: r1.id, service_id: Service.find_by!(name: "Punc
 
 # From before last January. The prices charged are last year's prices,
 #     and they are lower than what the same jobs cost on the wall today.
-r2 = Repair.create!(bike_id: sirrus_ignacio.id, received_by_id: josefa.id,
+r2 = Repair.create!(bike_id: sirrus_ignacio.id,
                     quote_answered_by_id: josefa.id,
                     state: "collected",
                     received_at: today - 400, promised_on: today - 398,
@@ -124,7 +146,7 @@ RepairService.create!(repair_id: r2.id, service_id: Service.find_by!(name: "Whee
                       mechanic_id: andres.id, charged_price: 10000, completed_at: today - 398)
 
 # Promised five days ago and still on the rack. This is the overdue one.
-r3 = Repair.create!(bike_id: aspect_paula.id, received_by_id: josefa.id,
+r3 = Repair.create!(bike_id: aspect_paula.id, received_by: josefa_account,
                     quote_answered_by_id: josefa.id,
                     state: "ready",
                     received_at: today - 12, promised_on: today - 5,
@@ -135,7 +157,7 @@ RepairService.create!(repair_id: r3.id, service_id: Service.find_by!(name: "Gear
                       mechanic_id: nicolas.id, charged_price: 8000, completed_at: today - 7)
 
 # On the stand right now.
-r4 = Repair.create!(bike_id: quick_seba.id, received_by_id: josefa.id,
+r4 = Repair.create!(bike_id: quick_seba.id, received_by: josefa_account,
                     quote_answered_by_id: josefa.id,
                     state: "in_progress",
                     received_at: today - 2, promised_on: today + 2,
@@ -148,7 +170,7 @@ RepairService.create!(repair_id: r4.id, service_id: Service.find_by!(name: "Cass
                       mechanic_id: paulina.id, charged_price: 16000)
 
 # Quoted yesterday. Nobody has answered yet, so there is no answer recorded.
-r5 = Repair.create!(bike_id: kansas_andrea.id, received_by_id: josefa.id,
+r5 = Repair.create!(bike_id: kansas_andrea.id, received_by: josefa_account,
                     state: "quoted",
                     received_at: today - 1, promised_on: today + 3)
 RepairService.create!(repair_id: r5.id, service_id: Service.find_by!(name: "Wheel build").id,
@@ -157,7 +179,7 @@ RepairService.create!(repair_id: r5.id, service_id: Service.find_by!(name: "Tube
                       charged_price: 18000)
 
 # The customer heard the price and said no.
-r6 = Repair.create!(bike_id: bianchi_felipe.id, received_by_id: josefa.id,
+r6 = Repair.create!(bike_id: bianchi_felipe.id, received_by: josefa_account,
                     quote_answered_by_id: josefa.id,
                     state: "declined",
                     received_at: today - 4, promised_on: today + 1,
@@ -166,7 +188,7 @@ RepairService.create!(repair_id: r6.id, service_id: Service.find_by!(name: "Fork
                       charged_price: 55000)
 
 # Said yes yesterday. Nobody has picked it up off the rack yet.
-r7 = Repair.create!(bike_id: escape_rocio.id, received_by_id: josefa.id,
+r7 = Repair.create!(bike_id: escape_rocio.id, received_by: josefa_account,
                     quote_answered_by_id: rodrigo.id,
                     state: "approved",
                     received_at: today - 1, promised_on: today + 4,
@@ -177,14 +199,14 @@ RepairService.create!(repair_id: r7.id, service_id: Service.find_by!(name: "Brak
                       charged_price: 10000)
 
 # Walked in this morning. Nothing has been looked at.
-r8 = Repair.create!(bike_id: aspect_matias.id, received_by_id: josefa.id,
+r8 = Repair.create!(bike_id: aspect_matias.id, received_by: josefa_account,
                     state: "received",
                     received_at: today, promised_on: today + 5)
 RepairService.create!(repair_id: r8.id, service_id: Service.find_by!(name: "Basic tune-up").id,
                       charged_price: 25000)
 
 # The same bike, twice, months apart.
-r9 = Repair.create!(bike_id: marlin_marcela.id, received_by_id: josefa.id,
+r9 = Repair.create!(bike_id: marlin_marcela.id,
                     quote_answered_by_id: josefa.id,
                     state: "collected",
                     received_at: today - 200, promised_on: today - 197,
@@ -194,7 +216,7 @@ RepairService.create!(repair_id: r9.id, service_id: Service.find_by!(name: "Fork
 RepairService.create!(repair_id: r9.id, service_id: Service.find_by!(name: "Bike wash").id,
                       mechanic_id: andres.id, charged_price: 8000, completed_at: today - 197)
 
-r10 = Repair.create!(bike_id: marlin_marcela.id, received_by_id: josefa.id,
+r10 = Repair.create!(bike_id: marlin_marcela.id, received_by: josefa_account,
                      quote_answered_by_id: josefa.id,
                      state: "in_progress",
                      received_at: today - 20, promised_on: today + 1,
@@ -205,7 +227,7 @@ RepairService.create!(repair_id: r10.id, service_id: Service.find_by!(name: "Spo
                       mechanic_id: andres.id, charged_price: 7000)
 
 # The other blue Marlin, so that the two of them both have history.
-r11 = Repair.create!(bike_id: marlin_tomas.id, received_by_id: josefa.id,
+r11 = Repair.create!(bike_id: marlin_tomas.id, received_by: josefa_account,
                      quote_answered_by_id: josefa.id,
                      state: "collected",
                      received_at: today - 60, promised_on: today - 58,
@@ -218,7 +240,7 @@ RepairService.create!(repair_id: r11.id, service_id: Service.find_by!(name: "Ped
                       mechanic_id: nicolas.id, charged_price: 7500,  completed_at: today - 58)
 
 # Finished, promised for tomorrow. Not late.
-r12 = Repair.create!(bike_id: marlin_marcela_2.id, received_by_id: josefa.id,
+r12 = Repair.create!(bike_id: marlin_marcela_2.id, received_by: josefa_account,
                      quote_answered_by_id: josefa.id,
                      state: "ready",
                      received_at: today - 3, promised_on: today + 1,
@@ -230,7 +252,7 @@ RepairService.create!(repair_id: r12.id, service_id: Service.find_by!(name: "Han
 
 # Four jobs, the most a repair carries here. One of them was discounted
 #      because Tomás has been coming for years.
-r13 = Repair.create!(bike_id: sirrus_marcela.id, received_by_id: josefa.id,
+r13 = Repair.create!(bike_id: sirrus_marcela.id, received_by: josefa_account,
                      quote_answered_by_id: rodrigo.id,
                      state: "collected",
                      received_at: today - 45, promised_on: today - 43,
@@ -245,7 +267,7 @@ RepairService.create!(repair_id: r13.id, service_id: Service.find_by!(name: "Bik
                       mechanic_id: andres.id,  charged_price: 5000,  completed_at: today - 43)
 
 # Quoted this morning, waiting on a phone call.
-r14 = Repair.create!(bike_id: kansas_javiera.id, received_by_id: josefa.id,
+r14 = Repair.create!(bike_id: kansas_javiera.id, received_by: josefa_account,
                      state: "quoted",
                      received_at: today - 1, promised_on: today + 6)
 RepairService.create!(repair_id: r14.id, service_id: Service.find_by!(name: "Derailleur hanger change").id,
@@ -256,14 +278,15 @@ RepairService.create!(repair_id: r14.id, service_id: Service.find_by!(name: "Bik
                       charged_price: 8000)
 
 # Camila's Giant, back again. Just arrived.
-r15 = Repair.create!(bike_id: escape_camila.id, received_by_id: josefa.id,
+r15 = Repair.create!(bike_id: escape_camila.id, received_by: josefa_account,
                      state: "received",
                      received_at: today, promised_on: today + 7)
 RepairService.create!(repair_id: r15.id, service_id: Service.find_by!(name: "Puncture repair").id,
                       charged_price: 6000)
 
 puts "Done."
-puts "  #{User.count} staff"
+puts "  #{StaffMember.count} staff"
+puts "  #{User.count} accounts"
 puts "  #{Service.count} services"
 puts "  #{Customer.count} customers"
 puts "  #{Bike.count} bikes"

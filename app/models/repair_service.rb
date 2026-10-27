@@ -1,7 +1,7 @@
 class RepairService < ApplicationRecord
   belongs_to :repair
   belongs_to :service
-  belongs_to :mechanic, class_name: "User", optional: true
+  belongs_to :mechanic, class_name: "StaffMember", optional: true
 
   validates :charged_price, presence: true, numericality: { greater_than: 0 }
 

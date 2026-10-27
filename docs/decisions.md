@@ -55,3 +55,16 @@ current one is only the last row. It becomes a `bike_ownerships` table between `
 `customers` with a start and an end date, every "whose bike is this" question goes through it
 instead of through a foreign key, and each repair needs to record the owner it was for — because
 a repair from 2023 must not follow the ownership that changed in 2025.
+
+## The role a new account gets
+
+**The question.** Anyone can sign up, and the sign-up form does not let the person choose a role.
+So a new account starts with one, and until the owner changes it from the console, that role is
+what the person is.
+
+**The decision.** `mechanic`. Of the three, it is the role that touches the least: a mechanic
+works on the bikes on the rack and marks their jobs as finished. The counter takes the bikes in,
+records what the customer answered and hands the bikes back, so it deals with the customers and
+with the money. The owner does all of that and runs the shop. If a new account turns out to
+belong to the counter, the owner changes one value; if a stranger signed up and got the counter's
+role, they would already be dealing with customers.

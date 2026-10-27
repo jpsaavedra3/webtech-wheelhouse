@@ -1,0 +1,40 @@
+<% content_for :title, @staff_member.name %>
+
+<h1 class="mb-1"><%= @staff_member.name %></h1>
+<p class="text-muted mb-4"><%= @staff_member.role.humanize %></p>
+
+<h2 class="h5 mb-3">Jobs done</h2>
+
+<% if @lines.empty? %>
+  <p class="text-muted">No jobs have been assigned to this person.</p>
+<% else %>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+      <tr>
+        <th scope="col">Job</th>
+        <th scope="col">Repair</th>
+        <th scope="col">Finished</th>
+        <th scope="col" class="text-end">Charged</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @lines.each do |line| %>
+        <tr>
+          <td><%= link_to line.service.name, line.service %></td>
+          <td><%= link_to "##{line.repair.id}", line.repair %></td>
+          <td><%= line.completed_at ? l(line.completed_at, format: :short) : "not done" %></td>
+          <td class="text-end"><%= money(line.charged_price) %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+<div class="d-flex flex-wrap gap-2 mt-4">
+  <%= link_to "Edit", edit_staff_member_path(@staff_member), class: "btn btn-outline-primary" %>
+  <%= button_to "Delete", @staff_member, method: :delete,
+                class: "btn btn-outline-danger",
+                form: { data: { turbo_confirm: "Delete #{@staff_member.name}? This cannot be undone." } } %>
+  <%= link_to "All staff", staff_members_path, class: "btn btn-outline-secondary" %>
+</div>

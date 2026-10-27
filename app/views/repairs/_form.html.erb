@@ -10,14 +10,6 @@
       <%= field_errors repair, :bike %>
     </div>
 
-    <div class="col-12 col-lg-6">
-      <%= f.label :received_by_id, "Taken in by", class: "form-label" %>
-      <%= f.collection_select :received_by_id, @staff, :id, :name,
-                              { include_blank: "Choose a person" },
-                              { class: field_class(repair, :received_by, "form-select") } %>
-      <%= field_errors repair, :received_by %>
-    </div>
-
     <div class="col-12 col-lg-4">
       <%= f.label :state, class: "form-label" %>
       <%= f.select :state, Repair.states.keys.map { |state| [ state.humanize, state ] },

@@ -29,6 +29,7 @@ class RepairsController < ApplicationController
 
   def create
     @repair = Repair.new(repair_params.except(:intake_photos))
+    @repair.received_by = Current.user
     add_intake_photos(@repair)
 
     if @repair.save
@@ -73,7 +74,7 @@ class RepairsController < ApplicationController
 
     def load_form_collections
       @bikes    = Bike.includes(:bike_model).by_serial
-      @staff    = User.by_name
+      @staff    = StaffMember.by_name
       @services = Service.by_name
     end
 
@@ -85,7 +86,7 @@ class RepairsController < ApplicationController
     end
 
     def repair_params
-      params.expect(repair: [ :bike_id, :received_by_id, :quote_answered_by_id, :state,
+      params.expect(repair: [ :bike_id, :quote_answered_by_id, :state,
                               :received_at, :promised_on, :quote_answered_at, :collected_at,
                               :diagnosis,
                               intake_photos: [],

@@ -50,7 +50,32 @@ api_token: the-string-it-printed
 bin/dev
 ```
 
-The app is at http://localhost:3000.
+The app is at http://localhost:3000. Every page except the price list asks you to sign in.
+
+## Accounts of the seed
+
+These accounts and passwords exist only in development, created by `bin/rails db:seed`:
+
+| Email address | Password | Role | Member of the staff |
+|---|---|---|---|
+| `rodrigo@wheelhouse.cl` | `rodrigo-wheelhouse` | owner | Rodrigo Alarcón |
+| `josefa@wheelhouse.cl` | `josefa-wheelhouse` | counter | Josefa Alarcón |
+| `andres@wheelhouse.cl` | `andres-wheelhouse` | mechanic | Andrés Lillo |
+| `nicolas@wheelhouse.cl` | `nicolas-wheelhouse` | mechanic | Nicolás Bustos |
+| `paulina@wheelhouse.cl` | `paulina-wheelhouse` | mechanic | Paulina Herrera |
+| `apprentice@wheelhouse.cl` | `apprentice-wheelhouse` | mechanic | none |
+
+## Emails in development
+
+No email leaves the machine. Each one is written to `tmp/mails/`, in a file named after the address
+it was sent to. For example, after asking for a new password for Josefa:
+
+```bash
+cat tmp/mails/josefa@wheelhouse.cl
+```
+
+The link in that email opens the form for a new password in the app running locally. The welcome
+email can also be seen at http://localhost:3000/rails/mailers.
 
 ## Asking the API from the terminal
 

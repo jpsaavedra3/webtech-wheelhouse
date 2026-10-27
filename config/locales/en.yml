@@ -15,9 +15,10 @@ en:
         charged_price: "Price charged"
       service:
         repair_services: "repairs"
-      user:
-        received_repairs: "repairs they took in"
+      staff_member:
+        user: "an account"
     errors:
       messages:
         restrict_dependent_destroy:
           has_many: "Cannot be deleted because it has %{record} on record"
+          has_one: "Cannot be deleted because it has %{record}"
