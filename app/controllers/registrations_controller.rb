@@ -1,5 +1,6 @@
 class RegistrationsController < ApplicationController
   allow_unauthenticated_access only: %i[ new create ]
+  skip_after_action :verify_policy_used # public, see docs/decisions.md
 
   def new
     @user = User.new

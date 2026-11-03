@@ -8,7 +8,9 @@
 </p>
 
 <h2 class="h5 mb-3"><%= pluralize(@repairs.size, "repair") %></h2>
-<%= link_to "Book a repair", new_repair_path(bike_id: @bike.id), class: "btn btn-sm btn-outline-primary mb-3" %>
+<% if policy(Repair).new? %>
+  <%= link_to "Book a repair", new_repair_path(bike_id: @bike.id), class: "btn btn-sm btn-outline-primary mb-3" %>
+<% end %>
 
 <% if @repairs.empty? %>
   <p class="text-muted">This bike has never been in for a repair.</p>
@@ -22,8 +24,8 @@
         <th scope="col">Owner</th>
         <th scope="col">State</th>
         <th scope="col">Promised</th>
-        <th>Diagnosis</th>
-        
+        <th scope="col">Photo</th>
+        <th scope="col">Diagnosis</th>
       </tr>
       </thead>
       <tbody>
@@ -34,9 +36,13 @@
 <% end %>
 
 <div class="d-flex flex-wrap gap-2 mt-4">
-  <%= link_to "Edit", edit_bike_path(@bike), class: "btn btn-outline-primary" %>
-  <%= button_to "Delete", @bike, method: :delete,
-                class: "btn btn-outline-danger",
-                form: { data: { turbo_confirm: "Delete #{bike_label(@bike)}? This cannot be undone." } } %>
+  <% if policy(@bike).edit? %>
+    <%= link_to "Edit", edit_bike_path(@bike), class: "btn btn-outline-primary" %>
+  <% end %>
+  <% if policy(@bike).destroy? %>
+    <%= button_to "Delete", @bike, method: :delete,
+                  class: "btn btn-outline-danger",
+                  form: { data: { turbo_confirm: "Delete #{bike_label(@bike)}? This cannot be undone." } } %>
+  <% end %>
   <%= link_to "All bikes", bikes_path, class: "btn btn-outline-secondary" %>
 </div>

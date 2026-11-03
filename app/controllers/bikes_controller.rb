@@ -3,11 +3,12 @@ class BikesController < ApplicationController
   before_action :load_form_collections, only: %i[ new edit create update ]
 
   def index
-    @bikes = Bike.includes(:bike_model, :customer).by_serial
+    authorize Bike
+    @bikes = policy_scope(Bike).includes(:bike_model, :customer).by_serial
   end
 
   def show
-    @repairs = @bike.repairs
+    @repairs = policy_scope(@bike.repairs)
                     .with_attached_intake_photos
                     .with_rich_text_diagnosis
                     .includes(bike: [ :bike_model, :customer ])
@@ -15,6 +16,7 @@ class BikesController < ApplicationController
   end
 
   def new
+    authorize Bike
     @bike = Bike.new(customer_id: params[:customer_id])
   end
 
@@ -22,6 +24,7 @@ class BikesController < ApplicationController
   end
 
   def create
+    authorize Bike
     @bike = Bike.new(bike_params)
 
     if @bike.save
@@ -51,6 +54,7 @@ class BikesController < ApplicationController
 
   def set_bike
     @bike = Bike.find(params[:id])
+    authorize @bike
   end
 
   def load_form_collections

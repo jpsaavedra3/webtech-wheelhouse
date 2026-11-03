@@ -1,7 +1,9 @@
 <% content_for :title, "Staff" %>
 
 <h1 class="mb-4">Staff</h1>
-<%= link_to "New member", new_staff_member_path, class: "btn btn-primary mb-3" %>
+<% if policy(StaffMember).new? %>
+  <%= link_to "New member", new_staff_member_path, class: "btn btn-primary mb-3" %>
+<% end %>
 <% if @staff_members.empty? %>
   <p class="text-muted">Nobody works here yet.</p>
 <% else %>

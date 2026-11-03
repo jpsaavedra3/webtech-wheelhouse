@@ -26,4 +26,11 @@ module ApplicationHelper
   def account_label(user)
     user.staff_member&.name || user.email_address
   end
+
+  # Whether the policy lets this person write a field of the record, so the form shows it.
+  def permitted_field?(record, field)
+    policy(record).permitted_attributes.any? do |attribute|
+      attribute == field || (attribute.is_a?(Hash) && attribute.key?(field))
+    end
+  end
 end

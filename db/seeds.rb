@@ -214,7 +214,7 @@ r9 = Repair.create!(bike_id: marlin_marcela.id,
 RepairService.create!(repair_id: r9.id, service_id: Service.find_by!(name: "Fork service").id,
                       mechanic_id: rodrigo.id, charged_price: 52000, completed_at: today - 197)
 RepairService.create!(repair_id: r9.id, service_id: Service.find_by!(name: "Bike wash").id,
-                      mechanic_id: andres.id, charged_price: 8000, completed_at: today - 197)
+                      mechanic_id: paulina.id, charged_price: 8000, completed_at: today - 197)
 
 r10 = Repair.create!(bike_id: marlin_marcela.id, received_by: josefa_account,
                      quote_answered_by_id: josefa.id,

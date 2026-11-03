@@ -68,3 +68,15 @@ records what the customer answered and hands the bikes back, so it deals with th
 with the money. The owner does all of that and runs the shop. If a new account turns out to
 belong to the counter, the owner changes one value; if a stranger signed up and got the counter's
 role, they would already be dealing with customers.
+
+## Actions that do not ask a policy
+
+Every action of the application asks a policy, except these. They all happen before there is an
+account to ask about, or they only touch the session of the person who is using them:
+
+| Controller | Actions | Why it is public |
+|---|---|---|
+| `SessionsController` | `new`, `create` | Signing in: there is no account yet until it succeeds |
+| `SessionsController` | `destroy` | Signing out: it only closes the session it is sent from |
+| `RegistrationsController` | `new`, `create` | Signing up: it creates the account that would be asked |
+| `PasswordsController` | `new`, `create`, `edit`, `update` | A forgotten password: the person cannot sign in; the link in the email is what proves who they are |

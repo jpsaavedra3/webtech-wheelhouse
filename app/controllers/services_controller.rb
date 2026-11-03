@@ -3,14 +3,18 @@ class ServicesController < ApplicationController
   before_action :set_service, only: %i[ show edit update destroy ]
 
   def index
-    @services = Service.by_name
+    authorize Service
+    @services = policy_scope(Service).by_name
   end
 
   def show
-    @lines = @service.repair_services.includes(repair: { bike: :bike_model }).newest_first
+    # Only the repairs this person may read.
+    @lines = @service.repair_services.where(repair: policy_scope(Repair))
+                     .includes(repair: { bike: :bike_model }).newest_first
   end
 
   def new
+    authorize Service
     @service = Service.new
   end
 
@@ -18,6 +22,7 @@ class ServicesController < ApplicationController
   end
 
   def create
+    authorize Service
     @service = Service.new(service_params)
 
     if @service.save
@@ -47,6 +52,7 @@ class ServicesController < ApplicationController
 
   def set_service
     @service = Service.find(params[:id])
+    authorize @service
   end
 
   def service_params

@@ -2,8 +2,8 @@
 
 <h1 class="mb-1">Repair #<%= @repair.id %></h1>
 <p class="text-muted mb-4">
-  <%= link_to "#{@repair.bike.bike_model.brand} #{@repair.bike.bike_model.name}", @repair.bike %> ·
-  <%= link_to @repair.bike.customer.name, @repair.bike.customer %>
+  <%= link_to_if policy(@repair.bike).show?, "#{@repair.bike.bike_model.brand} #{@repair.bike.bike_model.name}", @repair.bike %> ·
+  <%= link_to_if policy(@repair.bike.customer).show?, @repair.bike.customer.name, @repair.bike.customer %>
 </p>
 
 <div class="row g-4 mb-4">
@@ -93,9 +93,11 @@
                 alt: photo_alt(@repair),
                 class: "img-fluid rounded" %>
         <% end %>
-        <%= button_to "Remove", photo_repair_path(@repair, photo.id), method: :delete,
-              class: "btn btn-sm btn-outline-danger mt-2",
-              form: { data: { turbo_confirm: "Remove this photo? This cannot be undone." } } %>
+        <% if policy(@repair).remove_photo? %>
+          <%= button_to "Remove", photo_repair_path(@repair, photo.id), method: :delete,
+                class: "btn btn-sm btn-outline-danger mt-2",
+                form: { data: { turbo_confirm: "Remove this photo? This cannot be undone." } } %>
+        <% end %>
       </div>
     <% end %>
   </div>
@@ -104,9 +106,13 @@
 <% end %>
 
 <div class="d-flex flex-wrap gap-2 mt-4">
-  <%= link_to "Edit", edit_repair_path(@repair), class: "btn btn-outline-primary" %>
-  <%= button_to "Delete", @repair, method: :delete,
-                class: "btn btn-outline-danger",
-                form: { data: { turbo_confirm: "Delete repair ##{@repair.id}? This cannot be undone." } } %>
+  <% if policy(@repair).edit? %>
+    <%= link_to "Edit", edit_repair_path(@repair), class: "btn btn-outline-primary" %>
+  <% end %>
+  <% if policy(@repair).destroy? %>
+    <%= button_to "Delete", @repair, method: :delete,
+                  class: "btn btn-outline-danger",
+                  form: { data: { turbo_confirm: "Delete repair ##{@repair.id}? This cannot be undone." } } %>
+  <% end %>
   <%= link_to "All repairs", repairs_path, class: "btn btn-outline-secondary" %>
 </div>

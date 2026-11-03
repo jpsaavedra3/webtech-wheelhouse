@@ -2,7 +2,8 @@ class CustomersController < ApplicationController
   before_action :set_customer, only: %i[ show edit update destroy ]
 
   def index
-    @customers = Customer.includes(:bikes).by_name
+    authorize Customer
+    @customers = policy_scope(Customer).includes(:bikes).by_name
   end
 
   def show
@@ -10,6 +11,7 @@ class CustomersController < ApplicationController
   end
 
   def new
+    authorize Customer
     @customer = Customer.new
   end
 
@@ -17,6 +19,7 @@ class CustomersController < ApplicationController
   end
 
   def create
+    authorize Customer
     @customer = Customer.new(customer_params)
 
     if @customer.save
@@ -46,6 +49,7 @@ class CustomersController < ApplicationController
 
   def set_customer
     @customer = Customer.find(params[:id])
+    authorize @customer
   end
 
   def customer_params

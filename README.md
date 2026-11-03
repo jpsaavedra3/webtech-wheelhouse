@@ -54,16 +54,17 @@ The app is at http://localhost:3000. Every page except the price list asks you t
 
 ## Accounts of the seed
 
-These accounts and passwords exist only in development, created by `bin/rails db:seed`:
+These accounts and passwords exist only in development, created by `bin/rails db:seed`. What each
+role may do is in [`docs/permissions.md`](docs/permissions.md).
 
-| Email address | Password | Role | Member of the staff |
+| Email address | Password | Role | What it can do |
 |---|---|---|---|
-| `rodrigo@wheelhouse.cl` | `rodrigo-wheelhouse` | owner | Rodrigo Alarcón |
-| `josefa@wheelhouse.cl` | `josefa-wheelhouse` | counter | Josefa Alarcón |
-| `andres@wheelhouse.cl` | `andres-wheelhouse` | mechanic | Andrés Lillo |
-| `nicolas@wheelhouse.cl` | `nicolas-wheelhouse` | mechanic | Nicolás Bustos |
-| `paulina@wheelhouse.cl` | `paulina-wheelhouse` | mechanic | Paulina Herrera |
-| `apprentice@wheelhouse.cl` | `apprentice-wheelhouse` | mechanic | none |
+| `rodrigo@wheelhouse.cl` | `rodrigo-wheelhouse` | owner | Everything, the price list and the staff included |
+| `josefa@wheelhouse.cl` | `josefa-wheelhouse` | counter | Customers, bikes and every repair; edits repairs that were not handed back |
+| `andres@wheelhouse.cl` | `andres-wheelhouse` | mechanic | Only his own repairs: state, diagnosis and photos |
+| `nicolas@wheelhouse.cl` | `nicolas-wheelhouse` | mechanic | Only his own repairs: state, diagnosis and photos |
+| `paulina@wheelhouse.cl` | `paulina-wheelhouse` | mechanic | Only her own repairs: state, diagnosis and photos |
+| `apprentice@wheelhouse.cl` | `apprentice-wheelhouse` | mechanic | No member of the staff, so no repairs; reads the services and the staff |
 
 ## Emails in development
 

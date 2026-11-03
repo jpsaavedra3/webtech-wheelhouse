@@ -1,82 +1,103 @@
+<%# Each person sees only the fields their policy lets them write. %>
 <%= form_with model: repair do |f| %>
   <%= render "shared/error_summary", object: repair %>
 
   <div class="row g-3">
-    <div class="col-12 col-lg-6">
-      <%= f.label :bike_id, "Bike", class: "form-label" %>
-      <%= f.select :bike_id, @bikes.map { |bike| [ bike_label(bike), bike.id ] },
-                   { include_blank: "Choose a bike" },
-                   { class: field_class(repair, :bike, "form-select") } %>
-      <%= field_errors repair, :bike %>
-    </div>
+    <% if permitted_field?(repair, :bike_id) %>
+      <div class="col-12 col-lg-6">
+        <%= f.label :bike_id, "Bike", class: "form-label" %>
+        <%= f.select :bike_id, @bikes.map { |bike| [ bike_label(bike), bike.id ] },
+                     { include_blank: "Choose a bike" },
+                     { class: field_class(repair, :bike, "form-select") } %>
+        <%= field_errors repair, :bike %>
+      </div>
+    <% end %>
 
-    <div class="col-12 col-lg-4">
-      <%= f.label :state, class: "form-label" %>
-      <%= f.select :state, Repair.states.keys.map { |state| [ state.humanize, state ] },
-                   {}, { class: field_class(repair, :state, "form-select") } %>
-      <%= field_errors repair, :state %>
-    </div>
+    <% if permitted_field?(repair, :state) %>
+      <div class="col-12 col-lg-4">
+        <%= f.label :state, class: "form-label" %>
+        <%= f.select :state, Repair.states.keys.map { |state| [ state.humanize, state ] },
+                     {}, { class: field_class(repair, :state, "form-select") } %>
+        <%= field_errors repair, :state %>
+      </div>
+    <% end %>
 
-    <div class="col-12 col-lg-4">
-      <%= f.label :received_at, class: "form-label" %>
-      <%= f.datetime_field :received_at, class: field_class(repair, :received_at) %>
-      <%= field_errors repair, :received_at %>
-    </div>
+    <% if permitted_field?(repair, :received_at) %>
+      <div class="col-12 col-lg-4">
+        <%= f.label :received_at, class: "form-label" %>
+        <%= f.datetime_field :received_at, class: field_class(repair, :received_at) %>
+        <%= field_errors repair, :received_at %>
+      </div>
+    <% end %>
 
-    <div class="col-12 col-lg-4">
-      <%= f.label :promised_on, class: "form-label" %>
-      <%= f.date_field :promised_on, class: field_class(repair, :promised_on) %>
-      <%= field_errors repair, :promised_on %>
-    </div>
+    <% if permitted_field?(repair, :promised_on) %>
+      <div class="col-12 col-lg-4">
+        <%= f.label :promised_on, class: "form-label" %>
+        <%= f.date_field :promised_on, class: field_class(repair, :promised_on) %>
+        <%= field_errors repair, :promised_on %>
+      </div>
+    <% end %>
 
-    <div class="col-12 col-lg-4">
-      <%= f.label :quote_answered_by_id, "Answer recorded by", class: "form-label" %>
-      <%= f.collection_select :quote_answered_by_id, @staff, :id, :name,
-                              { include_blank: "Nobody yet" },
-                              { class: field_class(repair, :quote_answered_by, "form-select") } %>
-      <%= field_errors repair, :quote_answered_by %>
-    </div>
+    <% if permitted_field?(repair, :quote_answered_by_id) %>
+      <div class="col-12 col-lg-4">
+        <%= f.label :quote_answered_by_id, "Answer recorded by", class: "form-label" %>
+        <%= f.collection_select :quote_answered_by_id, @staff, :id, :name,
+                                { include_blank: "Nobody yet" },
+                                { class: field_class(repair, :quote_answered_by, "form-select") } %>
+        <%= field_errors repair, :quote_answered_by %>
+      </div>
+    <% end %>
 
-    <div class="col-12 col-lg-4">
-      <%= f.label :quote_answered_at, class: "form-label" %>
-      <%= f.datetime_field :quote_answered_at, class: field_class(repair, :quote_answered_at) %>
-      <%= field_errors repair, :quote_answered_at %>
-    </div>
+    <% if permitted_field?(repair, :quote_answered_at) %>
+      <div class="col-12 col-lg-4">
+        <%= f.label :quote_answered_at, class: "form-label" %>
+        <%= f.datetime_field :quote_answered_at, class: field_class(repair, :quote_answered_at) %>
+        <%= field_errors repair, :quote_answered_at %>
+      </div>
+    <% end %>
 
-    <div class="col-12 col-lg-4">
-      <%= f.label :collected_at, class: "form-label" %>
-      <%= f.datetime_field :collected_at, class: field_class(repair, :collected_at) %>
-      <%= field_errors repair, :collected_at %>
-    </div>
-  </div>
-  
-  <div class="mb-3 mt-3">
-    <%= f.label :intake_photos, "Intake photos", class: "form-label" %>
-    <%= f.file_field :intake_photos, multiple: true,
-          accept: "image/jpeg,image/png,image/webp",
-          class: field_class(repair, :intake_photos) %>
-    <div class="form-text">
-      JPEG, PNG or WebP, up to 5 MB each. The photos you choose are added to the ones the repair
-      already has.
-    </div>
-    <%= field_errors repair, :intake_photos %>
-  </div>
-
-  <div class="mb-3">
-    <%= f.label :diagnosis, class: "form-label" %>
-    <%= f.rich_text_area :diagnosis, class: "form-control" %>
+    <% if permitted_field?(repair, :collected_at) %>
+      <div class="col-12 col-lg-4">
+        <%= f.label :collected_at, class: "form-label" %>
+        <%= f.datetime_field :collected_at, class: field_class(repair, :collected_at) %>
+        <%= field_errors repair, :collected_at %>
+      </div>
+    <% end %>
   </div>
 
-  <h2 class="h5 mt-4 mb-3">Jobs on this repair</h2>
-
-  <%= f.fields_for :repair_services do |line| %>
-    <%= render "repair_services/fields", line: line %>
+  <% if permitted_field?(repair, :intake_photos) %>
+    <div class="mb-3 mt-3">
+      <%= f.label :intake_photos, "Intake photos", class: "form-label" %>
+      <%= f.file_field :intake_photos, multiple: true,
+            accept: "image/jpeg,image/png,image/webp",
+            class: field_class(repair, :intake_photos) %>
+      <div class="form-text">
+        JPEG, PNG or WebP, up to 5 MB each. The photos you choose are added to the ones the repair
+        already has.
+      </div>
+      <%= field_errors repair, :intake_photos %>
+    </div>
   <% end %>
 
-  <div class="form-text mb-3">
-    A job with no service chosen is ignored. To add more than the lines on offer, save and open the
-    repair again.
-  </div>
+  <% if permitted_field?(repair, :diagnosis) %>
+    <div class="mb-3">
+      <%= f.label :diagnosis, class: "form-label" %>
+      <%= f.rich_text_area :diagnosis, class: "form-control" %>
+    </div>
+  <% end %>
+
+  <% if permitted_field?(repair, :repair_services_attributes) %>
+    <h2 class="h5 mt-4 mb-3">Jobs on this repair</h2>
+
+    <%= f.fields_for :repair_services do |line| %>
+      <%= render "repair_services/fields", line: line %>
+    <% end %>
+
+    <div class="form-text mb-3">
+      A job with no service chosen is ignored. To add more than the lines on offer, save and open the
+      repair again.
+    </div>
+  <% end %>
 
   <%= f.submit class: "btn btn-primary" %>
 <% end %>

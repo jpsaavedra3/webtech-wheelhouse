@@ -2,14 +2,18 @@ class StaffMembersController < ApplicationController
   before_action :set_staff_member, only: %i[ show edit update destroy ]
 
   def index
-    @staff_members = StaffMember.by_name
+    authorize StaffMember
+    @staff_members = policy_scope(StaffMember).by_name
   end
 
   def show
-    @lines = @staff_member.repair_services.includes(:service, :repair).newest_first
+    # Only the repairs this person may read.
+    @lines = @staff_member.repair_services.where(repair: policy_scope(Repair))
+                          .includes(:service, :repair).newest_first
   end
 
   def new
+    authorize StaffMember
     @staff_member = StaffMember.new
   end
 
@@ -17,6 +21,7 @@ class StaffMembersController < ApplicationController
   end
 
   def create
+    authorize StaffMember
     @staff_member = StaffMember.new(staff_member_params)
 
     if @staff_member.save
@@ -46,6 +51,7 @@ class StaffMembersController < ApplicationController
 
   def set_staff_member
     @staff_member = StaffMember.find(params[:id])
+    authorize @staff_member
   end
 
   def staff_member_params

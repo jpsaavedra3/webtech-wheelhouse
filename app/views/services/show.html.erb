@@ -24,7 +24,7 @@
       <% @lines.each do |line| %>
         <tr>
           <td><%= link_to "##{line.repair.id}", line.repair %></td>
-          <td><%= link_to "#{line.repair.bike.bike_model.brand} #{line.repair.bike.bike_model.name}", line.repair.bike %></td>
+          <td><%= link_to_if policy(line.repair.bike).show?, "#{line.repair.bike.bike_model.brand} #{line.repair.bike.bike_model.name}", line.repair.bike %></td>
           <td><%= line.completed_at ? l(line.completed_at, format: :short) : "not done" %></td>
           <td class="text-end"><%= money(line.charged_price) %></td>
         </tr>
@@ -36,11 +36,13 @@
 <% end %>
 
 <div class="d-flex flex-wrap gap-2 mt-4">
-  <% if authenticated? %>
-  <%= link_to "Edit", edit_service_path(@service), class: "btn btn-outline-primary" %>
-  <%= button_to "Delete", @service, method: :delete,
-                class: "btn btn-outline-danger",
-                form: { data: { turbo_confirm: "Delete #{@service.name}? This cannot be undone." } } %>
+  <% if policy(@service).edit? %>
+    <%= link_to "Edit", edit_service_path(@service), class: "btn btn-outline-primary" %>
+  <% end %>
+  <% if policy(@service).destroy? %>
+    <%= button_to "Delete", @service, method: :delete,
+                  class: "btn btn-outline-danger",
+                  form: { data: { turbo_confirm: "Delete #{@service.name}? This cannot be undone." } } %>
   <% end %>
   <%= link_to "All services", services_path, class: "btn btn-outline-secondary" %>
 </div>

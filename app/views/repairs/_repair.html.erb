@@ -1,7 +1,7 @@
 <tr class="<%= "table-danger" if repair.overdue? %>">
   <td><%= link_to "##{repair.id}", repair %></td>
-  <td><%= link_to "#{repair.bike.bike_model.brand} #{repair.bike.bike_model.name}", repair.bike %></td>
-  <td><%= link_to repair.bike.customer.name, repair.bike.customer %></td>
+  <td><%= link_to_if policy(repair.bike).show?, "#{repair.bike.bike_model.brand} #{repair.bike.bike_model.name}", repair.bike %></td>
+  <td><%= link_to_if policy(repair.bike.customer).show?, repair.bike.customer.name, repair.bike.customer %></td>
   <td><span class="badge text-bg-secondary"><%= repair.state.humanize %></span></td>
   <td><%= l(repair.promised_on, format: :short) %></td>
   <td>
@@ -13,7 +13,6 @@
       <span class="photo-thumb rounded bg-body-secondary d-inline-block"></span>
     <% end %>
   </td>
-  
   <td class="text-body-secondary">
     <%= truncate(repair.diagnosis.to_plain_text, length: 70) %>
   </td>

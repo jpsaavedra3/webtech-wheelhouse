@@ -1,15 +1,16 @@
 class RepairsController < ApplicationController
-  before_action :set_repair, only: %i[ show edit update destroy ]
-  before_action :load_form_collections, only: %i[ new edit create update ]
   before_action :set_repair, only: %i[ show edit update destroy remove_photo ]
+  before_action :load_form_collections, only: %i[ new edit create update ]
+
   # A bike usually needs two or three jobs, so the intake form offers three empty lines.
   BLANK_LINES = 3
 
   def index
-    @repairs = Repair.with_attached_intake_photos
-                     .with_rich_text_diagnosis
-                     .includes(bike: [ :bike_model, :customer ])
-                     .by_promise
+    authorize Repair
+    @repairs = policy_scope(Repair).with_attached_intake_photos
+                                   .with_rich_text_diagnosis
+                                   .includes(bike: [ :bike_model, :customer ])
+                                   .by_promise
   end
 
   def show
@@ -17,6 +18,7 @@ class RepairsController < ApplicationController
   end
 
   def new
+    authorize Repair
     @repair = Repair.new(bike_id: params[:bike_id],
                          received_at: Time.current,
                          promised_on: Date.current + 3)
@@ -28,6 +30,7 @@ class RepairsController < ApplicationController
   end
 
   def create
+    authorize Repair
     @repair = Repair.new(repair_params.except(:intake_photos))
     @repair.received_by = Current.user
     add_intake_photos(@repair)
@@ -70,6 +73,7 @@ class RepairsController < ApplicationController
 
     def set_repair
       @repair = Repair.with_attached_intake_photos.with_rich_text_diagnosis.find(params[:id])
+      authorize @repair
     end
 
     def load_form_collections
@@ -85,13 +89,8 @@ class RepairsController < ApplicationController
       repair.intake_photos = repair.intake_photos.blobs + chosen
     end
 
+    # The policy decides which fields this person writes. A field outside its list is dropped.
     def repair_params
-      params.expect(repair: [ :bike_id, :quote_answered_by_id, :state,
-                              :received_at, :promised_on, :quote_answered_at, :collected_at,
-                              :diagnosis,
-                              intake_photos: [],
-                              repair_services_attributes: [ [ :id, :service_id, :mechanic_id,
-                                                              :charged_price, :completed_at,
-                                                              :_destroy ] ] ])
+      permitted_attributes(@repair || Repair)
     end
 end
